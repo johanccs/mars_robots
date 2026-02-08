@@ -18,9 +18,7 @@ class Program
 {
     // Fix for CS0120: Make fields static so they can be accessed from static Main
     private static Coordinate max_board_coordinates = new(0,0);
-    //private static Coordinate min_board_coordinates = new(0,0);
-    //private static Coordinate robot_scent_coordinates = new(0,0);
-
+ 
     private static int instructionLength = 100;
     private static int nrOfRobots = 0;
     private static List<Robot>robots = new List<Robot>();
@@ -28,22 +26,29 @@ class Program
 
     static void Main(string[] args)
     {
-        // Step 1
-        PrintMainHeader();
+        try
+        {
 
-        // Step 2
-        GetRobotCount();
+            RunApplicationLoop();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred: {e.Message}. Do you want to restart [Y/N]?");
+            var ans = Console.ReadLine()!;
 
-        // Step 3
-        SetupMaximumBoardCoordinates();
-
-        // Step 4
-        CreateRobots();
-
-        // Step 5
-        StartWalkOperation();
-
-        PrintFooterMessage();
+            if (ans.ToUpper() == "Y")
+            {
+                RunApplicationLoop();
+            }
+            
+        }
+        finally
+        {
+            robots.Clear();
+            nrOfRobots = 0;
+            max_board_coordinates = new(0, 0);
+        }
+        
     }
 
     // Step 1
@@ -70,6 +75,16 @@ class Program
         else
         {
             nrOfRobots = int.Parse(input!);
+            if(nrOfRobots <= 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid robot count. Please try again");
+                Console.ResetColor();
+
+                Thread.Sleep(2000);
+
+                RunApplicationLoop();
+            }
         }
     }
 
@@ -131,22 +146,39 @@ class Program
                 robot.Move();
 
                 PrintNewCoordinates(robot);
+                Thread.Sleep(1000);
+                PrintEmptyLines(2);
             }
         }
         else
         {
-            ResetForm();
+            RunApplicationLoop();
         }
     }
 
 
     // Helper methods
 
-    private static void ResetForm()
+    private static void RunApplicationLoop()
     {
         Console.Clear();
+        // Step 1
         PrintMainHeader();
+
+        // Step 2
         GetRobotCount();
+
+        // Step 3
+        SetupMaximumBoardCoordinates();
+
+        // Step 4
+        CreateRobots();
+
+        // Step 5
+        StartWalkOperation();
+
+        PrintFooterMessage();
+
     }
 
     private static bool ValidateUserInput(string? input)
@@ -166,6 +198,14 @@ class Program
         Console.WriteLine();
         Console.WriteLine("***Robot walk completed***");
         Console.Read();
+    }
+
+    private static void PrintEmptyLines(int lines)
+    {
+        for (int i = 0; i < lines; i++)
+        {
+            Console.WriteLine();
+        }
     }
 
 }

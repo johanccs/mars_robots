@@ -35,11 +35,9 @@ public class Robot
 
     public void Move()
     {
-        //Console.WriteLine("Name: " + Name);
-        //Console.WriteLine("Coordinate Orientation: " + Coordinate.Orientation);
-        //Console.WriteLine("Coordinates: X - " + Coordinate.X + " : Y - " + Coordinate.Y);
-        //Console.WriteLine("Movements: " + Movements);
-
+        Console.WriteLine("Current coordinates");
+        Console.WriteLine($"Name: { Name } >> Orientation: { Coordinate.Orientation } >> Coordinates.X: { Coordinate.X } Y : {Coordinate.Y}");
+     
         if (!ValidateMovements(Movements))
             throw new Exception("Some invalid movements added");
 
