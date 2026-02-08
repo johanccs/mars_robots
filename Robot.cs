@@ -13,13 +13,17 @@ public class Robot
     public Coordinate InternalCoordinate { get; }
     public string Name { get; }
     public Coordinate Coordinate { get; }
+    public Coordinate MaxBoardSize { get; }
+    public Coordinate RobotScent { get; set; } = new(0, 0);
+
     public string Movements { get; }
 
 
-    public Robot(string name, Coordinate coordinate, string movements)
+    public Robot(string name, Coordinate coordinate, string movements, Coordinate maxBoardSize)
     {
         Name = name;
         Coordinate = coordinate;
+        MaxBoardSize = maxBoardSize;
 
         if (string.IsNullOrEmpty(movements))
             throw new ArgumentNullException($"{nameof(movements)} is required");
@@ -55,18 +59,90 @@ public class Robot
         }
         else if (Coordinate.Orientation == "W")
         {
-            if (movement == "F")
+            MovementIfOrientationWest(movement);
+        }
+
+        else if(Coordinate.Orientation == "N")
+        {
+            MovementIfOrientationNorth(movement);
+        }
+        else
+        {
+            MovementIfOrientationSouth(movement);
+        }
+    }
+
+    private void MovementIfOrientationSouth(string movement)
+    {
+        if (movement == "F")
+        {
+            InternalCoordinate.Y--;
+            
+            if(InternalCoordinate.Y < 0)
             {
-                InternalCoordinate.X--;
+                RobotScent.Y = 0;
+                RobotScent.X = InternalCoordinate.X;
+                RobotScent.Orientation = "S";
+
+                PrintRoboScentMessage();
             }
-            else if (movement == "L")
+        }
+        else if (movement == "L")
+        {
+            InternalCoordinate.Orientation = "W";
+        }
+        else if (movement == "R")
+        {
+            InternalCoordinate.Orientation = "E";
+        }
+    }
+
+    private void MovementIfOrientationNorth(string movement)
+    {
+        if (movement == "F")
+        {
+            InternalCoordinate.Y++;
+
+            if (InternalCoordinate.Y > MaxBoardSize.Y)
             {
-                InternalCoordinate.Orientation = "S";
+                RobotScent.Y = InternalCoordinate.Y;
+                RobotScent.X = InternalCoordinate.X;
+                RobotScent.Orientation = "N";
+
+                PrintRoboScentMessage();
             }
-            else if (movement == "R")
+        }
+        else if (movement == "L")
+        {
+            InternalCoordinate.Orientation = "W";
+        }
+        else if (movement == "R")
+        {
+            InternalCoordinate.Orientation = "E";
+        }
+    }
+
+    private void MovementIfOrientationWest(string movement)
+    {
+        if (movement == "F")
+        {
+            InternalCoordinate.X--;
+            if (InternalCoordinate.X < 0)
             {
-                InternalCoordinate.Orientation = "N";
+                RobotScent.Y = InternalCoordinate.Y;
+                RobotScent.X = InternalCoordinate.X;
+                RobotScent.Orientation = "W";
+
+                PrintRoboScentMessage();
             }
+        }
+        else if (movement == "L")
+        {
+            InternalCoordinate.Orientation = "S";
+        }
+        else if (movement == "R")
+        {
+            InternalCoordinate.Orientation = "N";
         }
     }
 
@@ -75,6 +151,14 @@ public class Robot
         if (movement == "F")
         {
             InternalCoordinate.X++;
+            if (InternalCoordinate.X > MaxBoardSize.X)
+            {
+                RobotScent.Y = InternalCoordinate.Y;
+                RobotScent.X = InternalCoordinate.X;
+                RobotScent.Orientation = "E";
+
+                PrintRoboScentMessage();
+            }
         }
         else if (movement == "L")
         {
@@ -84,6 +168,11 @@ public class Robot
         {
             InternalCoordinate.Orientation = "S";
         }
+    }
+    
+    private void PrintRoboScentMessage()
+    {
+        Console.WriteLine($"Robot {Name} just fell off the edge at: {RobotScent}");
     }
 
     private bool ValidateMovements(string movements)
