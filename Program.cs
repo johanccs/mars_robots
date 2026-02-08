@@ -13,14 +13,13 @@
 
 using mars_robots;
 using marsRobots;
-using System.Threading.Channels;
 
 class Program
 {
     // Fix for CS0120: Make fields static so they can be accessed from static Main
     private static Coordinate max_board_coordinates = new(0,0);
-    private static Coordinate min_board_coordinates = new(0,0);
-    private static Coordinate robot_scent_coordinates = new(0,0);
+    //private static Coordinate min_board_coordinates = new(0,0);
+    //private static Coordinate robot_scent_coordinates = new(0,0);
 
     private static int instructionLength = 100;
     private static int nrOfRobots = 0;
@@ -43,6 +42,8 @@ class Program
 
         // Step 5
         StartWalkOperation();
+
+        PrintFooterMessage();
     }
 
     // Step 1
@@ -104,7 +105,7 @@ class Program
             Console.Write("Enter sequence of movements like FRLRF: ");
             var movements = Console.ReadLine();
 
-            var robot = new Robot($"R{nrOfRobots}", new Coordinate(coordinates!), movements);
+            var robot = new Robot($"R{nrOfRobots}", new Coordinate(coordinates!), movements!, max_board_coordinates);
             robots.Add(robot);
 
             nrOfRobots--;
@@ -128,20 +129,26 @@ class Program
             foreach (var robot in robots)
             {
                 robot.Move();
+
                 PrintNewCoordinates(robot);
             }
         }
         else
         {
-            Console.Clear();
-            PrintMainHeader();
-            GetRobotCount();
+            ResetForm();
         }
-
-        Console.Read();
     }
 
+
     // Helper methods
+
+    private static void ResetForm()
+    {
+        Console.Clear();
+        PrintMainHeader();
+        GetRobotCount();
+    }
+
     private static bool ValidateUserInput(string? input)
     {
         return string.IsNullOrEmpty(input);
@@ -150,8 +157,15 @@ class Program
     private static void PrintNewCoordinates(Robot robot)
     {
         Console.WriteLine($"Robot name: {robot.Name}");
-        Console.WriteLine($"Coordinate.X: {robot.InternalCoordinate.X} : Coordinate.Y: {robot.InternalCoordinate.Y}");
-        Console.WriteLine($"Orientation: {robot.InternalCoordinate.Orientation}");
+        Console.WriteLine($" >> Coordinate.X: {robot.InternalCoordinate.X} : Coordinate.Y: {robot.InternalCoordinate.Y}");
+        Console.WriteLine($" >> Orientation: {robot.InternalCoordinate.Orientation}");
+    }
+
+    private static void PrintFooterMessage()
+    {
+        Console.WriteLine();
+        Console.WriteLine("***Robot walk completed***");
+        Console.Read();
     }
 
 }

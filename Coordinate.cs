@@ -29,7 +29,7 @@
 
             if (coords.Length == 3)
             {
-                if (!validDirections.Any(x => x == coords[2]))
+                if (!validDirections.Any(x => x.ToUpper() == coords[2].ToUpper()))
                     throw new ArgumentException("Please enter a valid orientation (N, S, W, E)");
              
                 Orientation = coords[2].ToUpper();
