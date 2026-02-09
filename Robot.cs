@@ -8,7 +8,7 @@ public class Robot
 
     // InternalCoordinate serves as a running coordinate that is updated
     // as the robot steps are taken. This will also be returned to main program
-    public Coordinate InternalCoordinate { get; }
+    //public Coordinate InternalCoordinate { get; }
     public string Name { get; }
     public Coordinate Coordinate { get; }
     public Coordinate MaxBoardSize { get; }
@@ -26,8 +26,6 @@ public class Robot
             throw new ArgumentNullException("Movement is required");
 
         Movements = movements.ToUpper();
-
-        InternalCoordinate = new(Coordinate.X, Coordinate.Y, Coordinate.Orientation!);
     }
 
     public void Move()
@@ -80,12 +78,12 @@ public class Robot
     {
         if (movement == ValidMoves.Forward)
         {
-            InternalCoordinate.Y--;
+            Coordinate.Y--;
             
-            if(InternalCoordinate.Y < 0)
+            if(Coordinate.Y < 0)
             {
                 RobotScent.Y = 0;
-                RobotScent.X = InternalCoordinate.X;
+                RobotScent.X = Coordinate.X;
                 RobotScent.Orientation = Orientation.South;
 
                 PrintRoboScentMessage();
@@ -96,11 +94,11 @@ public class Robot
         }
         else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = Orientation.West;
+            Coordinate.Orientation = Orientation.West;
         }
         else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = Orientation.East;
+            Coordinate.Orientation = Orientation.East;
         }
 
         return true;
@@ -110,12 +108,12 @@ public class Robot
     {
         if (movement == ValidMoves.Forward)
         {
-            InternalCoordinate.Y++;
+            Coordinate.Y++;
 
-            if (InternalCoordinate.Y > MaxBoardSize.Y)
+            if (Coordinate.Y > MaxBoardSize.Y)
             {
-                RobotScent.Y = InternalCoordinate.Y;
-                RobotScent.X = InternalCoordinate.X;
+                RobotScent.Y = Coordinate.Y;
+                RobotScent.X = Coordinate.X;
                 RobotScent.Orientation = Orientation.North;
 
                 PrintRoboScentMessage();
@@ -126,11 +124,11 @@ public class Robot
         }
         else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = Orientation.West;
+            Coordinate.Orientation = Orientation.West;
         }
         else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = Orientation.East;
+            Coordinate.Orientation = Orientation.East;
         }
 
         return true;
@@ -140,11 +138,11 @@ public class Robot
     {
         if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.X--;
-            if (InternalCoordinate.X < 0)
+            Coordinate.X--;
+            if (Coordinate.X < 0)
             {
-                RobotScent.Y = InternalCoordinate.Y;
-                RobotScent.X = InternalCoordinate.X;
+                RobotScent.Y = Coordinate.Y;
+                RobotScent.X = Coordinate.X;
                 RobotScent.Orientation = Orientation.West;
 
                 PrintRoboScentMessage();
@@ -155,11 +153,11 @@ public class Robot
         }
         else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = Orientation.South;
+            Coordinate.Orientation = Orientation.South;
         }
         else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = Orientation.North;
+            Coordinate.Orientation = Orientation.North;
         }
 
         return true;
@@ -169,11 +167,11 @@ public class Robot
     {
         if (movement == ValidMoves.Forward)
         {
-            InternalCoordinate.X++;
-            if (InternalCoordinate.X > MaxBoardSize.X)
+            Coordinate.X++;
+            if (Coordinate.X > MaxBoardSize.X)
             {
-                RobotScent.Y = InternalCoordinate.Y;
-                RobotScent.X = InternalCoordinate.X;
+                RobotScent.Y = Coordinate.Y;
+                RobotScent.X = Coordinate.X;
                 RobotScent.Orientation = Orientation.East;
 
                 PrintRoboScentMessage();
@@ -184,11 +182,11 @@ public class Robot
         }
         else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = Orientation.North;
+            Coordinate.Orientation = Orientation.North;
         }
         else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = Orientation.South;
+            Coordinate.Orientation = Orientation.South;
         }
 
         return true;
