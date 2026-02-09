@@ -40,16 +40,21 @@ Mars Robots
 6.2 Clone github repo and navigate to root folder.
 6.3 In the same folder as the .sln file – open a terminal and type dotnet run.
 6.4 This should restore, build and run the application.
+
 6.5.1
-![Robot Screenshot](./images/nr_of_robots.png)
+![Robot Screenshot](./images/1.png)
 fig 1. Enter number of robots
 
 6.5.2
+![Robot Screenshot](./images/2.png)
 fig 2. Enter max board zide and robot count.
 
 6.5.3
+![Robot Screenshot](./images/3.png)
 fig 3. Enter valid coorderinates and movements for each robot.
 
 6.5.4
+
+![Robot Screenshot](./images/4.png)
 
 fig 4. Walk procedure completed
