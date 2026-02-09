@@ -1,6 +1,4 @@
 ﻿using marsRobots;
-using System;
-using System.Linq;
 
 namespace mars_robots;
 
@@ -43,35 +41,44 @@ public class Robot
         for(int i = 0; i <= Movements.Length - 1; i++)
         {
             // Start walking algorithm Movements FR
-            TakeStep(Movements[i].ToString());
+            if (!TakeStep(Movements[i].ToString()))
+                return;
         }
     }
 
-    private void TakeStep(string movement)
+    private bool TakeStep(string movement)
     {
         // movement F
-        if (Coordinate.Orientation == "E")
+        if (Coordinate.Orientation == Orientation.East)
         {
-            MovementIfOrientationEast(movement);
+            var result = MovementIfOrientationEast(movement);
+
+            return result;
         }
-        else if (Coordinate.Orientation == "W")
+        else if (Coordinate.Orientation == Orientation.West)
         {
-            MovementIfOrientationWest(movement);
+            bool result = MovementIfOrientationWest(movement);
+
+            return result;
         }
 
-        else if(Coordinate.Orientation == "N")
+        else if(Coordinate.Orientation == Orientation.North)
         {
-            MovementIfOrientationNorth(movement);
+            bool result = MovementIfOrientationNorth(movement);
+            
+            return result;
         }
         else
         {
-            MovementIfOrientationSouth(movement);
+            var result = MovementIfOrientationSouth(movement);
+
+            return result;
         }
     }
 
-    private void MovementIfOrientationSouth(string movement)
+    private bool MovementIfOrientationSouth(string movement)
     {
-        if (movement == "F")
+        if (movement == ValidMoves.Forward)
         {
             InternalCoordinate.Y--;
             
@@ -79,27 +86,29 @@ public class Robot
             {
                 RobotScent.Y = 0;
                 RobotScent.X = InternalCoordinate.X;
-                RobotScent.Orientation = "S";
+                RobotScent.Orientation = Orientation.South;
 
                 PrintRoboScentMessage();
 
                 // Should not continue to monitor movement
-                return;
+                return false;
             }
         }
-        else if (movement == "L")
+        else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = "W";
+            InternalCoordinate.Orientation = Orientation.West;
         }
-        else if (movement == "R")
+        else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = "E";
+            InternalCoordinate.Orientation = Orientation.East;
         }
+
+        return true;
     }
 
-    private void MovementIfOrientationNorth(string movement)
+    private bool MovementIfOrientationNorth(string movement)
     {
-        if (movement == "F")
+        if (movement == ValidMoves.Forward)
         {
             InternalCoordinate.Y++;
 
@@ -107,81 +116,88 @@ public class Robot
             {
                 RobotScent.Y = InternalCoordinate.Y;
                 RobotScent.X = InternalCoordinate.X;
-                RobotScent.Orientation = "N";
+                RobotScent.Orientation = Orientation.North;
 
                 PrintRoboScentMessage();
 
                 // Should not continue to monitor movement
-                return;
+                return false;
             }
         }
-        else if (movement == "L")
+        else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = "W";
+            InternalCoordinate.Orientation = Orientation.West;
         }
-        else if (movement == "R")
+        else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = "E";
+            InternalCoordinate.Orientation = Orientation.East;
         }
+
+        return true;
     }
 
-    private void MovementIfOrientationWest(string movement)
+    private bool MovementIfOrientationWest(string movement)
     {
-        if (movement == "F")
+        if (movement == ValidMoves.Right)
         {
             InternalCoordinate.X--;
             if (InternalCoordinate.X < 0)
             {
                 RobotScent.Y = InternalCoordinate.Y;
                 RobotScent.X = InternalCoordinate.X;
-                RobotScent.Orientation = "W";
+                RobotScent.Orientation = Orientation.West;
 
                 PrintRoboScentMessage();
 
                 // Should not continue to monitor movement
-                return;
+                return false;
             }
         }
-        else if (movement == "L")
+        else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = "S";
+            InternalCoordinate.Orientation = Orientation.South;
         }
-        else if (movement == "R")
+        else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = "N";
+            InternalCoordinate.Orientation = Orientation.North;
         }
+
+        return true;
     }
 
-    private void MovementIfOrientationEast(string movement)
+    private bool MovementIfOrientationEast(string movement)
     {
-        if (movement == "F")
+        if (movement == ValidMoves.Forward)
         {
             InternalCoordinate.X++;
             if (InternalCoordinate.X > MaxBoardSize.X)
             {
                 RobotScent.Y = InternalCoordinate.Y;
                 RobotScent.X = InternalCoordinate.X;
-                RobotScent.Orientation = "E";
+                RobotScent.Orientation = Orientation.East;
 
                 PrintRoboScentMessage();
 
                 // Should not continue to monitor movement
-                return;
+                return false;
             }
         }
-        else if (movement == "L")
+        else if (movement == ValidMoves.Left)
         {
-            InternalCoordinate.Orientation = "N";
+            InternalCoordinate.Orientation = Orientation.North;
         }
-        else if (movement == "R")
+        else if (movement == ValidMoves.Right)
         {
-            InternalCoordinate.Orientation = "S";
+            InternalCoordinate.Orientation = Orientation.South;
         }
+
+        return true;
     }
     
     private void PrintRoboScentMessage()
     {
-        Console.WriteLine($"Robot {Name} just fell off the edge at: {RobotScent}");
+        Console.WriteLine("LOST");
+        Console.WriteLine($"Robot scent coordinates X: { RobotScent.X } Y: { RobotScent.Y }");
     }
 
     private bool ValidateMovements(string movements)
