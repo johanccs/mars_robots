@@ -15,7 +15,6 @@ public class Robot
     public Coordinate Coordinate { get; }
     public Coordinate MaxBoardSize { get; }
     public Coordinate RobotScent { get; set; } = new(0, 0);
-
     public string Movements { get; }
 
 
@@ -26,11 +25,11 @@ public class Robot
         MaxBoardSize = maxBoardSize;
 
         if (string.IsNullOrEmpty(movements))
-            throw new ArgumentNullException($"{nameof(movements)} is required");
+            throw new ArgumentNullException("Movement is required");
 
         Movements = movements.ToUpper();
 
-        InternalCoordinate = new(Coordinate.X, Coordinate.Y, Coordinate.Orientation);
+        InternalCoordinate = new(Coordinate.X, Coordinate.Y, Coordinate.Orientation!);
     }
 
     public void Move()
@@ -39,7 +38,7 @@ public class Robot
         Console.WriteLine($"Name: { Name } >> Orientation: { Coordinate.Orientation } >> Coordinates.X: { Coordinate.X } Y : {Coordinate.Y}");
      
         if (!ValidateMovements(Movements))
-            throw new Exception("Some invalid movements added");
+            throw new Exception("Argument contains invalid movements");
 
         for(int i = 0; i <= Movements.Length - 1; i++)
         {
@@ -83,6 +82,9 @@ public class Robot
                 RobotScent.Orientation = "S";
 
                 PrintRoboScentMessage();
+
+                // Should not continue to monitor movement
+                return;
             }
         }
         else if (movement == "L")
@@ -108,6 +110,9 @@ public class Robot
                 RobotScent.Orientation = "N";
 
                 PrintRoboScentMessage();
+
+                // Should not continue to monitor movement
+                return;
             }
         }
         else if (movement == "L")
@@ -132,6 +137,9 @@ public class Robot
                 RobotScent.Orientation = "W";
 
                 PrintRoboScentMessage();
+
+                // Should not continue to monitor movement
+                return;
             }
         }
         else if (movement == "L")
@@ -156,6 +164,9 @@ public class Robot
                 RobotScent.Orientation = "E";
 
                 PrintRoboScentMessage();
+
+                // Should not continue to monitor movement
+                return;
             }
         }
         else if (movement == "L")

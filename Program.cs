@@ -17,6 +17,7 @@ using marsRobots;
 class Program
 {
     private static Coordinate max_board_coordinates = new(0,0);
+    private static int max_coordinateSize = 50;
  
     private static int instructionLength = 100;
     private static int nrOfRobots = 0;
@@ -96,10 +97,11 @@ class Program
 
         input = Console.ReadLine();
 
-        if (ValidateUserInput(input))
+        if (!ValidateCoordinateLength(input!))
         {
-            Console.WriteLine("Invalid input. Please enter a valid coordinate");
-            return;
+            Console.WriteLine($"Invalid. Coordinates should be more than 0 and less than {max_coordinateSize}. Restarting...");
+            Thread.Sleep(2000);
+            RunApplicationLoop();
         }
         else
         {
@@ -115,6 +117,13 @@ class Program
         {
             Console.Write($"Create robot {nrOfRobots}. Enter current coordinate and orientation such as 1 3 E: ");
             var coordinates = Console.ReadLine();
+
+            if(!ValidateCoordinateLength(coordinates!))
+            {
+                Console.WriteLine($"Coordinates should be less than {max_coordinateSize}. Restarting...");
+                Thread.Sleep(2000);
+                RunApplicationLoop();
+            }
 
             Console.Write("Enter sequence of movements like FRLRF: ");
             var movements = Console.ReadLine()!;
@@ -193,10 +202,26 @@ class Program
 
     private static bool ValidateMovementLength(string movements)
     {
-        if (!ValidateUserInput(movements))
+        if (ValidateUserInput(movements))
             return false;
         
         if (movements.Length > instructionLength)
+            return false;
+
+        return true;
+    }
+
+    private static bool ValidateCoordinateLength(string coordinates)
+    {
+        if (ValidateUserInput(coordinates))
+            return false;
+
+        var internalCoords = coordinates.Split(" ");
+
+        if (internalCoords.Length < 2)
+            return false;
+
+        if (internalCoords[0].Length > max_coordinateSize || internalCoords[1].Length > max_coordinateSize)
             return false;
 
         return true;
