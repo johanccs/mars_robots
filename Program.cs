@@ -28,7 +28,6 @@ class Program
     {
         try
         {
-
             RunApplicationLoop();
         }
         catch (Exception e)
