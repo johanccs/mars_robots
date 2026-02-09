@@ -16,7 +16,6 @@ using marsRobots;
 
 class Program
 {
-    // Fix for CS0120: Make fields static so they can be accessed from static Main
     private static Coordinate max_board_coordinates = new(0,0);
  
     private static int instructionLength = 100;
@@ -118,8 +117,14 @@ class Program
             var coordinates = Console.ReadLine();
 
             Console.Write("Enter sequence of movements like FRLRF: ");
-            var movements = Console.ReadLine();
+            var movements = Console.ReadLine()!;
 
+            if(!ValidateMovementLength(movements))
+            {
+                Console.WriteLine($"Ensure that movements are valid. Should be more than 0 and less than {instructionLength} characters");
+                RunApplicationLoop();
+            }
+            
             var robot = new Robot($"R{nrOfRobots}", new Coordinate(coordinates!), movements!, max_board_coordinates);
             robots.Add(robot);
 
@@ -184,6 +189,17 @@ class Program
     private static bool ValidateUserInput(string? input)
     {
         return string.IsNullOrEmpty(input);
+    }
+
+    private static bool ValidateMovementLength(string movements)
+    {
+        if (!ValidateUserInput(movements))
+            return false;
+        
+        if (movements.Length > instructionLength)
+            return false;
+
+        return true;
     }
 
     private static void PrintNewCoordinates(Robot robot)

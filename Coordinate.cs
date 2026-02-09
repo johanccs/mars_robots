@@ -6,7 +6,7 @@
 
         public int X { get; set; }
         public int Y { get; set; }
-        public string Orientation { get; set; }
+        public string? Orientation { get; set; }
         public Coordinate(int x, int y, string orientation = "")
         {
             if (x < 0 || y < 0)
@@ -19,7 +19,6 @@
 
         public Coordinate(string coordinates)
         {
-            // 4 3 E
             if (string.IsNullOrEmpty(coordinates)) 
                 throw new ArgumentException("Please enter a valid coordinate");
 
@@ -34,7 +33,6 @@
              
                 Orientation = coords[2].ToUpper();
             }
-
 
             X = int.Parse(coords[0]);
             Y = int.Parse(coords[1]);
