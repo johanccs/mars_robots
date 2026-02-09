@@ -229,8 +229,8 @@ class Program
     private static void PrintNewCoordinates(Robot robot)
     {
         Console.WriteLine($"Robot name: {robot.Name}");
-        Console.WriteLine($" >> Coordinate.X: {robot.InternalCoordinate.X} : Coordinate.Y: {robot.InternalCoordinate.Y}");
-        Console.WriteLine($" >> Orientation: {robot.InternalCoordinate.Orientation}");
+        Console.WriteLine($" >> Coordinate.X: {robot.Coordinate.X} : Coordinate.Y: {robot.Coordinate.Y}");
+        Console.WriteLine($" >> Orientation: {robot.Coordinate.Orientation}");
     }
 
     private static void PrintFooterMessage()
